@@ -32,7 +32,7 @@ func (r *Router) AddSubRouter(prefix string, callback func(*Router)) {
 }
 
 func (r *Router) AddStatic(prefix string, folder string) {
-	callerPath := CallerPath(2)
+	currentModule := CurrentModule()
 	r.mux.PathPrefix(prefix).HandlerFunc(func(out http.ResponseWriter, in *http.Request) {
 		rpath := strings.SplitAfterN(in.RequestURI, prefix, 2)
 
@@ -41,7 +41,7 @@ func (r *Router) AddStatic(prefix string, folder string) {
 			return
 		}
 
-		http.ServeFile(out, in, filepath.Join(callerPath, folder, rpath[1]))
+		http.ServeFile(out, in, filepath.Join(currentModule, folder, rpath[1]))
 	})
 }
 
