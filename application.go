@@ -1,28 +1,28 @@
 package core
 
 import (
-	"path/filepath"
-	"io"
 	"fmt"
+	"io"
+	"path/filepath"
 	"strings"
 )
 
 type Application struct {
 	Version string
-	Name string
-	Root string
-	Modules []Module
+	Name    string
+	Root    string
+	Modules map[string]*Module
 }
 
-var App = Application {
+var App = Application{
 	"0.0.1",
 	"Gobly Engine",
 	filepath.Clean(callerPath(0) + strings.Repeat("../", 4)),
-	make([]Module, 0),
+	make(map[string]*Module),
 }
 
 func ShowWelcome(out io.Writer, router *Router) {
-	fmt.Fprintln(out, "Gobly Web Framweork is up and running!")
+	fmt.Fprintf(out, "%s (v%s) is up and running!\n", App.Name, App.Version)
 	fmt.Fprintln(out, "Activated routes: ")
 	router.FPrint(out)
 }
