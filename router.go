@@ -1,12 +1,12 @@
 package core
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
 	"fmt"
+	"github.com/gorilla/mux"
 	"io"
-	"strings"
+	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 type Router struct {
@@ -22,8 +22,24 @@ func NewRouter() *Router {
 	return &router
 }
 
-func (r *Router) AddHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
-	r.mux.HandleFunc(path, callback)
+func (r *Router) addHandler(path string, callback func(http.ResponseWriter, *http.Request)) *mux.Route {
+	return r.mux.HandleFunc(path, callback)
+}
+
+func (r *Router) AddPostHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
+	r.addHandler(path, callback).Methods("POST")
+}
+
+func (r *Router) AddGetHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
+	r.addHandler(path, callback).Methods("GET")
+}
+
+func (r *Router) AddPutHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
+	r.addHandler(path, callback).Methods("PUT")
+}
+
+func (r *Router) AddDeleteHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
+	r.addHandler(path, callback).Methods("DELETE")
 }
 
 func (r *Router) AddSubRouter(prefix string, callback func(*Router)) {
