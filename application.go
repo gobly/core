@@ -21,6 +21,9 @@ var App = Application{
 	make(map[string]*Module),
 }
 
+// Used in attribute tag definitions
+const TAG_KEY = "gobly"
+
 func ShowWelcome(out io.Writer, router *Router) {
 	fmt.Fprintf(out, "%s (v%s) is up and running!\n", App.Name, App.Version)
 	fmt.Fprintln(out, "Activated routes: ")
