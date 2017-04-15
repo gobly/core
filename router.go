@@ -47,6 +47,10 @@ func (r *Router) AddSubRouter(prefix string, callback func(*Router)) {
 	callback(&Router{s})
 }
 
+func (r *Router) Args(in *http.Request) map[string]string {
+	return mux.Vars(in)
+}
+
 func (r *Router) AddStatic(prefix string, folder string) {
 	currentModule := CurrentModule()
 	r.mux.PathPrefix(prefix).HandlerFunc(func(out http.ResponseWriter, in *http.Request) {
