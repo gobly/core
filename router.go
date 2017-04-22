@@ -22,24 +22,28 @@ func NewRouter() *Router {
 	return &router
 }
 
-func (r *Router) addHandler(path string, callback func(http.ResponseWriter, *http.Request)) *mux.Route {
-	return r.mux.HandleFunc(path, callback)
+func (r *Router) addHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) *mux.Route {
+	return r.mux.HandleFunc(path, func (out http.ResponseWriter, in *http.Request) {
+		for _, cb := range callback {
+			if cb(out, in) { return }
+		}
+	})
 }
 
-func (r *Router) AddPostHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
-	r.addHandler(path, callback).Methods("POST")
+func (r *Router) AddPostHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) {
+	r.addHandler(path, callback...).Methods("POST")
 }
 
-func (r *Router) AddGetHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
-	r.addHandler(path, callback).Methods("GET")
+func (r *Router) AddGetHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) {
+	r.addHandler(path, callback...).Methods("GET")
 }
 
-func (r *Router) AddPutHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
-	r.addHandler(path, callback).Methods("PUT")
+func (r *Router) AddPutHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) {
+	r.addHandler(path, callback...).Methods("PUT")
 }
 
-func (r *Router) AddDeleteHandler(path string, callback func(http.ResponseWriter, *http.Request)) {
-	r.addHandler(path, callback).Methods("DELETE")
+func (r *Router) AddDeleteHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) {
+	r.addHandler(path, callback...).Methods("DELETE")
 }
 
 func (r *Router) AddSubRouter(prefix string, callback func(*Router)) {
