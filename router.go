@@ -23,9 +23,11 @@ func NewRouter() *Router {
 }
 
 func (r *Router) addHandler(path string, callback ...func(http.ResponseWriter, *http.Request) bool) *mux.Route {
-	return r.mux.HandleFunc(path, func (out http.ResponseWriter, in *http.Request) {
+	return r.mux.HandleFunc(path, func(out http.ResponseWriter, in *http.Request) {
 		for _, cb := range callback {
-			if cb(out, in) { return }
+			if cb(out, in) {
+				return
+			}
 		}
 	})
 }
