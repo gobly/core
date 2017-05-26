@@ -12,3 +12,7 @@ func Encode(out io.Writer, model interface{}) error {
 func Decode(in io.Reader, model interface{}) error {
 	return json.NewDecoder(in).Decode(model)
 }
+
+func Marshal(model interface{}) ([]byte, error) {
+	return json.Marshal(model)
+}
