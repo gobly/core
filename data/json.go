@@ -16,3 +16,7 @@ func Decode(in io.Reader, model interface{}) error {
 func Marshal(model interface{}) ([]byte, error) {
 	return json.Marshal(model)
 }
+
+func Unmarshal(data []byte, model interface{}) error {
+	return json.Unmarshal(data, model)
+}
