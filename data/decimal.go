@@ -2,11 +2,11 @@ package json
 
 import (
 	"encoding/json"
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Decimal struct {
-	bson.Decimal128
+	primitive.Decimal128
 }
 
 func (d Decimal) MarshalJSON() ([]byte, error) {
@@ -17,7 +17,7 @@ func (d *Decimal) UnmarshalJSON(b []byte) error {
 	var decimalNumber json.Number
 	err := json.Unmarshal(b, &decimalNumber)
 	if err == nil {
-		d.Decimal128, err = bson.ParseDecimal128(decimalNumber.String())
+		d.Decimal128, err = primitive.ParseDecimal128(decimalNumber.String())
 	}
 
 	return err
